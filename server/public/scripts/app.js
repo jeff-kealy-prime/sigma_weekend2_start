@@ -3,8 +3,9 @@ var objectIndex = 0;
 var data = {};
 
 $(document).ready(function(){
-  $('#index').on('click', '#nextButton', nextButtonFunc);
-  $('#index').on('click', '#prevButton', prevButtonFunc);
+  $('#buttons').on('click', '#nextButton', nextButtonFunc);
+  $('#buttons').on('click', '#prevButton', prevButtonFunc);
+
 
 
   loadData()
@@ -13,17 +14,12 @@ $(document).ready(function(){
         type: "GET",
         url: "/data",
         success: function(potato){
-
           data = potato;
           appendToDom();
         },
         error: function() {
           console.log('Error with request');
         }
-
-
-  //On the DOM should be:
-
   /*
   -One person's information
 
@@ -32,7 +28,8 @@ $(document).ready(function(){
   style differently than the others.
   -A 'Next' button and a 'Previous' button
   Clicking on the Next button should navigate to the next person, clicking
-  on the Previous button should navigate to the previous person. The highlighted index point should update also as you click through to other people.
+  on the Previous button should navigate to the previous person. The highlighted
+  index point should update also as you click through to other people.
 
   */
       });
@@ -42,6 +39,11 @@ $(document).ready(function(){
 
 function appendToDom(){
   appendSingleObjInstance(data.sigmanauts[objectIndex])
+  var $el = data.sigmanauts[objectIndex];
+  for (var i = 0; i < data.sigmanauts.length; i++) {
+    $('#index').append('<div class="blocks ' + i + '"></div>');
+
+  }
 }
 
 function appendSingleObjInstance(person){
@@ -52,12 +54,22 @@ function appendSingleObjInstance(person){
 }
 
 function nextButtonFunc(){
+  $('#objectElements').empty();
   console.log("next button");
   objectIndex++;
-  console.log(objectIndex);
+  console.log("object Index: "+ objectIndex);
   appendToDom(objectIndex)
+
   //if statement to
 }
 function prevButtonFunc(){
+  $('#objectElements').empty();
   console.log("prev button");
+  objectIndex++;
+  appendToDom(objectIndex)
+  console.log("object Index: "+ objectIndex);
+
+}
+function countIndex(){
+  $('#index').replace('<div class="blocks ' + objectIndex + '"></div>');
 }
