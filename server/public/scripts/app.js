@@ -8,6 +8,7 @@ $(document).ready(function(){
 
 
 
+
   loadData()
   function loadData(){
       $.ajax({
@@ -15,6 +16,7 @@ $(document).ready(function(){
         url: "/data",
         success: function(potato){
           data = potato;
+          addBlocks();
           appendToDom();
         },
         error: function() {
@@ -37,39 +39,53 @@ $(document).ready(function(){
 
 });
 
+
+
 function appendToDom(){
   appendSingleObjInstance(data.sigmanauts[objectIndex])
-  var $el = data.sigmanauts[objectIndex];
-  for (var i = 0; i < data.sigmanauts.length; i++) {
-    $('#index').append('<div class="blocks ' + i + '"></div>');
+}
 
+function addBlocks(){
+  for (var i = 0; i < data.sigmanauts.length; i++) {
+    $('#index').append('<div class="blocks" id="block' + i + '"></div>');
+    $('.blocks').css({background : "red", border: "1px solid black"})
+    $('#block' + objectIndex).css({background : "black"});
+    console.log("start" + objectIndex);
   }
 }
 
 function appendSingleObjInstance(person){
-  $('#objectElements').append('<div>' + person.name + '</div>');
-  $('#objectElements').append('<div>' + person.git_username
-+ '</div>');
+  $('#objectElements').animate({opacity: '0'}, 300).animate({opacity: '1'}, 300);
+  $('#objectElements').append('<div>' + person.name + '</div>')
+  $('#objectElements').append('<div>' + person.git_username + '</div>');
   $('#objectElements').append('<div>' + person.shoutout + '</div>');
 }
-
+setInterval(nextButtonFunc, 10000);
 function nextButtonFunc(){
+
   $('#objectElements').empty();
-  console.log("next button");
   objectIndex++;
-  console.log("object Index: "+ objectIndex);
+  if(objectIndex > (data.sigmanauts.length-1)){
+    objectIndex = data.sigmanauts.length-1;
+  }
+  console.log(data.sigmanauts.length-1);
+  console.log(objectIndex);
+
+  $('#block' + objectIndex).animate({opacity: '.1'}, 300).css({background : "black"}).animate({opacity: '1'}, 300);
+  $('#block' + (objectIndex - 1)).css({background : "red"});
   appendToDom(objectIndex)
 
-  //if statement to
 }
+
 function prevButtonFunc(){
   $('#objectElements').empty();
-  console.log("prev button");
-  objectIndex++;
+  objectIndex--;
+  if(objectIndex < 0){
+    objectIndex = 0;
+  }
+  $('#block' + objectIndex).animate({opacity: '.1'}, 300).css({background : "black"}).animate({opacity: '1'}, 300);
+  $('#block' + (objectIndex + 1)).css({background : "red"});
   appendToDom(objectIndex)
-  console.log("object Index: "+ objectIndex);
+  ;
 
-}
-function countIndex(){
-  $('#index').replace('<div class="blocks ' + objectIndex + '"></div>');
 }
